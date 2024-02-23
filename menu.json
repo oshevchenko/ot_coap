@@ -1,0 +1,33 @@
+[
+    {
+    "section": "Main menu",
+        "items": [
+            {
+              "item": "Default",
+              "path": "#/"
+            },
+            {
+                "item": "Сlient",
+                "path": "#/client"
+            },
+            {
+                "item": "Seller",
+                "path": "#/seller"
+            },
+            {
+                "item": "Device",
+                "path": "#/device"
+            }
+        ]
+    },
+
+    {
+    "section": "Secondary menu",
+        "items": [
+            {
+                "item": "Product",
+                "path": "#/product"
+            }
+        ]
+    }
+]
