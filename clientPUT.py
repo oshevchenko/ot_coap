@@ -3,6 +3,7 @@ import asyncio
 
 from aiocoap import *
 from aiocoap import PUT
+from aiocoap.message import Message
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,10 +16,12 @@ async def main():
     context = await Context.create_client_context()
 
     await asyncio.sleep(2)
-
-    payload = b"The quick brown fox jumps over the lazy dog.\n"
+	
+    # payload = b'{"id":4, "serial": "4444444444", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
+    #     "lastreport": "2024-02-23 11:10:15", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
+    payload = b'{"serial": "44443333", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
+        "lastreport": "2024-02-23 11:10:00", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
     request = Message(code=PUT, payload=payload, uri="coap://localhost/keepalive")
-    # request = Message(code=PUT, payload=payload, uri="coap://localhost/other/blockss")
 
     response = await context.request(request).response
 

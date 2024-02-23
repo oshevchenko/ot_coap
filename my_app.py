@@ -37,6 +37,8 @@ def home_page():
 @app.route('/<string:model>/', methods=['POST'])
 @cross_origin(origins=origins_domains)
 def client_create(model):
+	print(request.json)
+	print(type(request.json))
 	return jsonify(db.getModel(model).create(request.json)), 200
 
 @app.route('/<string:model>/', methods=['GET'])

@@ -6,6 +6,10 @@ import asyncio
 import aiocoap.resource as resource
 from aiocoap.numbers.contentformat import ContentFormat
 import aiocoap
+import json
+
+from app_db import app_db
+db = app_db('myApp.db')
 
 class Welcome(resource.Resource):
     representations = {
@@ -72,7 +76,14 @@ class KeepAlive(resource.Resource):
         return aiocoap.Message(payload=self.content)
 
     async def render_put(self, request):
-        print('PUT payload: %s' % request.payload)
+
+        payload = request.payload.decode('utf-8')
+
+        print('PUT payload: {}'.format(payload))
+        payload_dict = json.loads(payload)
+        print('PUT payload type: %s' % type(payload_dict))
+
+        db.getModel('device').update(payload_dict)
         self.set_content(request.payload)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
 
