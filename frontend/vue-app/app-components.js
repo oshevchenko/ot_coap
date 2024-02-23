@@ -168,7 +168,8 @@ Vue.component('standard-page', {
   data: function () {
     return {
         current_row: this.current_row,
-        form_data: this.form_data
+        form_data: this.form_data,
+        timer: ''
     }
   },
   template: `
@@ -219,6 +220,7 @@ Vue.component('standard-page', {
     store.commit('title', this.title)
     this.instance_url = appDataset[this.instance]['url']
     this.read_front()
+    this.timer = setInterval(this.read_front, 1000)
   },
   methods: {
     selectRow: function (row) {

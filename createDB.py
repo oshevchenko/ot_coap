@@ -32,6 +32,7 @@ conn.execute('''CREATE TABLE DEVICE
 	serial		TEXT,
 	name		TEXT,
 	ipv6		TEXT,
+	rloc16		TEXT,
 	lastreport	TEXT,
 	swver		TEXT,
 	devtype		TEXT,
@@ -121,14 +122,14 @@ for item in product:
 print ("Table 'PRODUCT' is done")
 
 device = [
-	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b7', 'lastreport': '2024-02-23 10:14:06', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
-	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b8', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
-	{'id':3, 'serial': '1564366776', 'name': 'Hallway clock', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b9', 'lastreport': '2024-02-23 10:10:15', 'swver': 'v0.0.3', 'devtype': 'dig. clock', 'devrole': 'router'},
+	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b7', 'rloc16': 'f801', 'lastreport': '2024-02-23 10:14:06', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
+	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b8', 'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
+	{'id':3, 'serial': '1564366776', 'name': 'Hallway clock', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b9', 'rloc16': 'f803', 'lastreport': '2024-02-23 10:10:15', 'swver': 'v0.0.3', 'devtype': 'dig. clock', 'devrole': 'router'},
 ]
 
 for item in device:
-	SQL = 'INSERT INTO DEVICE (id, name, serial, ipv6, lastreport, swver, devtype, devrole) VALUES({0}, "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}")'\
-		.format(item['id'], item['name'], item['serial'], item['ipv6'], item['lastreport'], item['swver'], item['devtype'], item['devrole'])
+	SQL = 'INSERT INTO DEVICE (id, name, serial, ipv6, rloc16, lastreport, swver, devtype, devrole) VALUES({0}, "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'\
+		.format(item['id'], item['name'], item['serial'], item['ipv6'], item['rloc16'], item['lastreport'], item['swver'], item['devtype'], item['devrole'])
 	cur.execute(SQL)
 
 print ("Table 'DEVICE' is done")

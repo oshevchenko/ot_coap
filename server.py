@@ -82,9 +82,13 @@ class KeepAlive(resource.Resource):
         print('PUT payload: {}'.format(payload))
         payload_dict = json.loads(payload)
         print('PUT payload type: %s' % type(payload_dict))
+        curr_time = datetime.datetime.now().\
+                strftime("%Y-%m-%d %H:%M:%S").encode('ascii')
+        payload_dict['lastreport'] = curr_time.decode('utf-8')
 
         db.getModel('device').update(payload_dict)
-        self.set_content(request.payload)
+        self.content = request.payload
+        # self.set_content(request.payload)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
 
 class SeparateLargeResource(resource.Resource):

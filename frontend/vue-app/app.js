@@ -127,12 +127,13 @@ const appDataset = {
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
-        {name:'name', 'title': 'Name', type:'string', sort: false},
-        {name:'ipv6', 'title': 'IPv6', type:'string', sort: false},
-        {name:'lastreport', 'title': 'Last seen', type:'string', sort: false},
-        {name:'swver', 'title': 'SW ver.', type:'string', sort: false},
-        {name:'devtype', 'title': 'Type', type:'string', sort: false},
-        {name:'devrole', 'title': 'OT role', type:'string', sort: false}
+        {name:'name', 'title': 'Name', type:'string', sort: true},
+        {name:'ipv6', 'title': 'IPv6', type:'string', sort: true},
+        {name:'rloc16', 'title': 'rloc16', type:'string', sort: true},
+        {name:'lastreport', 'title': 'Last seen', type:'string', sort: true},
+        {name:'swver', 'title': 'SW ver.', type:'string', sort: true},
+        {name:'devtype', 'title': 'Type', type:'string', sort: true},
+        {name:'devrole', 'title': 'OT role', type:'string', sort: true}
       ],
       'form': [
         {name:'name', 'title': 'Name', type:'string'}
