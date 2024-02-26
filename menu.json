@@ -9,6 +9,14 @@
             {
                 "item": "Device",
                 "path": "#/device"
+            },
+            {
+                "item": "Temperature",
+                "path": "#/device_temperature"
+            },
+            {
+                "item": "Emergency",
+                "path": "#/device_emergency"
             }
         ]
     }

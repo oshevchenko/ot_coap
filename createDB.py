@@ -39,6 +39,21 @@ conn.execute('''CREATE TABLE DEVICE
 	devrole		TEXT
 	);''')
 
+conn.execute('''CREATE TABLE TEMPERATURE
+	(id		INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL,
+	serial		TEXT,
+	lastreport	TEXT,
+	val_c		TEXT,
+	val_f		TEXT
+	);''')
+
+conn.execute('''CREATE TABLE EMERGENCY
+	(id		INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL,
+	serial		TEXT,
+	lastreport	TEXT,
+	btn			TEXT
+	);''')
+
 print ("Table created successfully")
 
 #############################
@@ -133,6 +148,33 @@ for item in device:
 	cur.execute(SQL)
 
 print ("Table 'DEVICE' is done")
+
+device = [
+	{'id':1, 'serial': '1345234234', 'lastreport': '2024-02-23 10:14:06', 'val_c': '24.3', 'val_f': '75.7'},
+	{'id':2, 'serial': '1345444565', 'lastreport': '2024-02-23 10:13:06', 'val_c': '23.2', 'val_f': '73.7'},
+	{'id':3, 'serial': '1345666236', 'lastreport': '2024-02-23 10:12:06', 'val_c': '22.1', 'val_f': '71.8'},
+	{'id':4, 'serial': '1345777237', 'lastreport': '2024-02-23 10:10:06', 'val_c': '23.0', 'val_f': '73.4'},
+]
+for item in device:
+	SQL = 'INSERT INTO TEMPERATURE (id, serial, lastreport, val_c, val_f) VALUES({0}, "{1}", "{2}", "{3}", "{4}")'\
+		.format(item['id'], item['serial'], item['lastreport'], item['val_c'], item['val_f'])
+	cur.execute(SQL)
+
+print ("Table 'TEMPERATURE' is done")
+
+device = [
+	{'id':1, 'serial': '8987971644', 'lastreport': '2024-02-23 09:14:16', 'btn': '1'},
+	{'id':2, 'serial': '1694516356', 'lastreport': '2024-02-23 11:13:55', 'btn': '2'},
+	{'id':3, 'serial': '9841397465', 'lastreport': '2024-02-23 13:12:25', 'btn': '2'},
+	{'id':4, 'serial': '6519548342', 'lastreport': '2024-02-23 14:05:54', 'btn': '1'},
+]
+
+for item in device:
+	SQL = 'INSERT INTO EMERGENCY (id, serial, lastreport, btn) VALUES({0}, "{1}", "{2}", "{3}")'\
+		.format(item['id'], item['serial'], item['lastreport'], item['btn'])
+	cur.execute(SQL)
+
+print ("Table 'EMERGENCY' is done")
 
 conn.commit()
 

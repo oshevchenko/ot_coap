@@ -1,6 +1,6 @@
 import sqlite3
 
-from model import empty, menu, client, seller, device, product
+from model import empty, menu, client, seller, device, product, device_temperature, device_emergency
 
 class app_db:
 
@@ -16,6 +16,8 @@ class app_db:
 		self.model['seller'] = seller.model(self.connection)
 		self.model['device'] = device.model(self.connection)
 		self.model['product'] = product.model(self.connection)
+		self.model['device_temperature'] = device_temperature.model(self.connection)
+		self.model['device_emergency'] = device_emergency.model(self.connection)
 
 	def __del__(self):
 		self.connection.close()

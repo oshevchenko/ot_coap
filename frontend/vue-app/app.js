@@ -60,6 +60,8 @@ const routes = [
     beforeEnter (to, from, next) { loadComponents("client.js"); next() }
   },
   { path: '/seller', component: { template: '<standard-page instance="seller" title="Seller" />' } },
+  { path: '/device_temperature', component: { template: '<standard-page instance="device_temperature" title="Temperature" />' } },
+  { path: '/device_emergency', component: { template: '<standard-page instance="device_emergency" title="Emergency" />' } },
   { path: '/device', component: { template: '<standard-page instance="device" title="Devices" />' } },
   { path: '/product',
     component: { template: '<product v-if="router.app.componentsReady(`product`)" />' },
@@ -117,6 +119,37 @@ const appDataset = {
         {name:'name', 'title': 'Name', type:'string'},
         {name:'phone', 'title': 'Phone', type:'string'},
         {name:'email', 'title': 'E-mail', type:'string'}
+      ]
+    }
+  },
+
+  'device_temperature': {
+    'instance': 'device_temperature',
+    'url': 'http://localhost:5000/device_temperature/',
+    'fields': {
+      'table': [
+        {name:'serial', 'title': 'Serial', type:'string', sort: true},
+        {name:'lastreport', 'title': 'Last seen', type:'string', sort: true},
+        {name:'val_c', 'title': '\u2103', type:'string', sort: true},
+        {name:'val_f', 'title': '\u2109', type:'string', sort: true}
+      ],
+      'form': [
+        {name:'serial', 'title': 'Serial', type:'string'}
+      ]
+    }
+  },
+
+  'device_emergency': {
+    'instance': 'device_emergency',
+    'url': 'http://localhost:5000/device_emergency/',
+    'fields': {
+      'table': [
+        {name:'serial', 'title': 'Serial', type:'string', sort: true},
+        {name:'lastreport', 'title': 'Last seen', type:'string', sort: true},
+        {name:'btn', 'title': 'Button', type:'string', sort: true},
+      ],
+      'form': [
+        {name:'serial', 'title': 'Serial', type:'string'}
       ]
     }
   },

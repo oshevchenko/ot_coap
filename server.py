@@ -91,6 +91,49 @@ class KeepAlive(resource.Resource):
         # self.set_content(request.payload)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
 
+class SensorData(resource.Resource):
+    """"""
+
+    def __init__(self):
+        super().__init__()
+        self.set_content(b"xxx\n")
+
+    def set_content(self, content):
+        self.content = content
+        while len(self.content) <= 1024:
+            self.content = self.content + b"0123456789\n"
+
+    async def render_get(self, request):
+        return aiocoap.Message(payload=self.content)
+
+    async def render_put(self, request):
+
+        payload = request.payload.decode('utf-8')
+
+        print('PUT payload: {}'.format(payload))
+        payload_dict = {}
+        payload_dict_coap = json.loads(payload)
+        print('PUT payload type: %s' % type(payload_dict_coap))
+
+        payload_dict['serial'] = payload_dict_coap['serial']
+
+        curr_time = datetime.datetime.now().\
+                strftime("%Y-%m-%d %H:%M:%S").encode('ascii')
+        payload_dict['lastreport'] = curr_time.decode('utf-8')
+
+        if payload_dict_coap['devtype'] == 'TempSensor':
+            print('Update device_temperature: %s' % payload_dict)
+            payload_dict['val_c'] = payload_dict_coap['value']
+            payload_dict['val_f'] = payload_dict_coap['value']
+            db.getModel('device_temperature').update(payload_dict)
+        elif payload_dict_coap['devtype'] == 'EmergBtn':
+            payload_dict['btn'] = payload_dict_coap['value']
+            db.getModel('device_emergency').update(payload_dict)
+
+        self.content = request.payload
+        # self.set_content(request.payload)
+        return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
+
 class SeparateLargeResource(resource.Resource):
     """Example resource which supports the GET method. It uses asyncio.sleep to
     simulate a long-running operation, and thus forces the protocol to send
@@ -172,6 +215,7 @@ async def main():
     root.add_resource(['other', 'block'], BlockResource())
     root.add_resource(['other', 'separate'], SeparateLargeResource())
     root.add_resource(['keepalive'], KeepAlive())
+    root.add_resource(['sensordata'], SensorData())
     root.add_resource(['whoami'], WhoAmI())
 
     await aiocoap.Context.create_server_context(root)

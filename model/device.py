@@ -12,9 +12,10 @@ class model(default.model):
 			cursor.execute('SELECT * FROM {0} WHERE(serial={1});'.format(self.objName, data["serial"]))
 			field_names = list(map(lambda x: x[0], cursor.description))
 			rows = cursor.fetchall()
-			print(rows)
+			print('rows {} self.objName {}'.format(rows, self.objName))
 			if (len(rows) == 0):
 				# Create new record
+				print('create new record {} {}'.format(self.objName, data))
 				result = super().create(data)
 			else:
 				record = {}
