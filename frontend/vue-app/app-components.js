@@ -222,6 +222,9 @@ Vue.component('standard-page', {
     this.read_front()
     this.timer = setInterval(this.read_front, 1000)
   },
+  beforeDestroy: function () {
+    clearInterval(this.timer);
+  },
   methods: {
     selectRow: function (row) {
         this.current_row = row
