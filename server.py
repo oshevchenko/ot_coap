@@ -123,8 +123,19 @@ class SensorData(resource.Resource):
 
         if payload_dict_coap['devtype'] == 'TempSensor':
             print('Update device_temperature: %s' % payload_dict)
-            payload_dict['val_c'] = payload_dict_coap['value']
-            payload_dict['val_f'] = payload_dict_coap['value']
+            temp_c = 0.0
+            temp_f = 0.0
+            try:
+                payload_dict_coap['value'].replace(',', '.')
+                temp_c = float(payload_dict_coap['value'])
+
+                temp_f = (temp_c * 9/5) + 32
+                payload_dict['val_c'] = str(round(temp_c, 2))
+                payload_dict['val_f'] = str(round(temp_f, 2))
+            except ValueError:
+                print('Error: value is not a number')
+                payload_dict['val_c'] = payload_dict_coap['value']
+                payload_dict['val_f'] = payload_dict_coap['value']
             db.getModel('device_temperature').update(payload_dict)
         elif payload_dict_coap['devtype'] == 'EmergBtn':
             payload_dict['btn'] = payload_dict_coap['value']
