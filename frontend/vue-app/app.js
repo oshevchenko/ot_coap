@@ -75,11 +75,11 @@ const urlHash = '#'
 const appDataset = {
   'menu':{
     'instance': 'menu',
-    'url': 'http://localhost:5000/menu/',
+    'url': 'http://192.168.2.9:8080/menu/',
   },
   'client': {
     'instance': 'client',
-    'url': 'http://localhost:5000/client/',
+    'url': 'http://192.168.2.9:8080/client/',
     'fields': {
       'table': [
         {name:'name', 'title': 'Name', type:'string', sort: true},
@@ -108,7 +108,7 @@ const appDataset = {
 
   'seller': {
     'instance': 'seller',
-    'url': 'http://localhost:5000/seller/',
+    'url': 'http://192.168.2.9:8080/seller/',
     'fields': {
       'table': [
         {name:'name', 'title': 'Name', type:'string', sort: true},
@@ -125,7 +125,7 @@ const appDataset = {
 
   'device_temperature': {
     'instance': 'device_temperature',
-    'url': 'http://localhost:5000/device_temperature/',
+    'url': 'http://192.168.2.9:8080/device_temperature/',
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -141,7 +141,7 @@ const appDataset = {
 
   'device_emergency': {
     'instance': 'device_emergency',
-    'url': 'http://localhost:5000/device_emergency/',
+    'url': 'http://192.168.2.9:8080/device_emergency/',
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -156,7 +156,7 @@ const appDataset = {
 
   'device': {
     'instance': 'device',
-    'url': 'http://localhost:5000/device/',
+    'url': 'http://192.168.2.9:8080/device/',
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -176,7 +176,7 @@ const appDataset = {
 
   'product': {
     'instance': 'product',
-    'url': 'http://localhost:5000/product/',
+    'url': 'http://192.168.2.9:8080/product/',
     'fields': {
       'table': [
         {name:'code', 'title': 'Code', type:'string', sort: true},

@@ -1,8 +1,8 @@
 Vue.component('default', {
   template: `
 <div>
-  <h1>Frontend + Backend</h1>
-  <h2>Работа с базой данных</h2>
+  <h1>Sapling OpenThread network monitor</h1>
+  <h2>Check Main Menu for options.</h2>
 </div>`,
   mounted: function() {
     store.commit('title', 'Default')
@@ -10,3 +10,4 @@ Vue.component('default', {
 })
 
 app.componentsLoaded('default')
+
