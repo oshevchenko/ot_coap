@@ -189,7 +189,9 @@ Vue.component('standard-page', {
       :fields="appDataset[this.instance]['fields']['table']"
       :actions="[
           {name:'edit', caption:'', title: ' Edit', action: 'edit', class: 'fas fa-edit text-primary fa-icon-900'},
-          {name:'delete', caption:'', title: 'Delete', action: 'delete', class: 'fas fa-eraser text-danger fa-icon-900'}
+          {name:'delete', caption:'', title: 'Delete', action: 'delete', class: 'fas fa-eraser text-danger fa-icon-900'},
+          {name:'led_off', caption:'', title: 'LED Off', action: 'led_off', class: 'fas fa-toggle-off	text-primary fa-icon-900'},
+          {name:'led_on', caption:'', title: 'LED On', action: 'led_on', class: 'fas fa-toggle-on	text-primary fa-icon-900'}
       ]"
       perpage="10"
       @select="selectRow($event)"
