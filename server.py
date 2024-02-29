@@ -86,7 +86,7 @@ class KeepAlive(resource.Resource):
                 strftime("%Y-%m-%d %H:%M:%S").encode('ascii')
         payload_dict['lastreport'] = curr_time.decode('utf-8')
 
-        db.getModel('device').update(payload_dict)
+        db.getModel('device').update(0, payload_dict)
         self.content = request.payload
         # self.set_content(request.payload)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
@@ -136,10 +136,10 @@ class SensorData(resource.Resource):
                 print('Error: value is not a number')
                 payload_dict['val_c'] = payload_dict_coap['value']
                 payload_dict['val_f'] = payload_dict_coap['value']
-            db.getModel('device_temperature').update(payload_dict)
+            db.getModel('device_temperature').update(0, payload_dict)
         elif payload_dict_coap['devtype'] == 'EmergBtn':
             payload_dict['btn'] = payload_dict_coap['value']
-            db.getModel('device_emergency').update(payload_dict)
+            db.getModel('device_emergency').update(0, payload_dict)
 
         self.content = request.payload
         # self.set_content(request.payload)
