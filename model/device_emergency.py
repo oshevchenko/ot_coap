@@ -3,4 +3,5 @@ from model import device
 class model(device.model):
 	def __init__(self, connection):
 		self.connection = connection
-		self.objName = 'EMERGENCY'
+		self.objName = 'DEVICE'
+		self.devType = 'EmergBtn'

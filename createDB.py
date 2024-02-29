@@ -36,7 +36,12 @@ conn.execute('''CREATE TABLE DEVICE
 	lastreport	TEXT,
 	swver		TEXT,
 	devtype		TEXT,
-	devrole		TEXT
+	devrole		TEXT,
+	val_c		TEXT,
+	val_f		TEXT,
+	btn			TEXT,
+	led_cmd 	INTEGER,
+	led_state 	INTEGER
 	);''')
 
 conn.execute('''CREATE TABLE TEMPERATURE
@@ -137,14 +142,29 @@ for item in product:
 print ("Table 'PRODUCT' is done")
 
 device = [
-	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b7', 'rloc16': 'f801', 'lastreport': '2024-02-23 10:14:06', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
-	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b8', 'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'tmp sensor', 'devrole': 'child'},
-	{'id':3, 'serial': '1564366776', 'name': 'Hallway clock', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b9', 'rloc16': 'f803', 'lastreport': '2024-02-23 10:10:15', 'swver': 'v0.0.3', 'devtype': 'dig. clock', 'devrole': 'router'},
+	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b7',
+  		'rloc16': 'f801', 'lastreport': '2024-02-23 10:14:06', 'swver': 'v0.0.1', 'devtype': 'TempSensor', 'devrole': 'child',
+		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_cmd': 0, 'led_state': 0},
+	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fda1:98ec:3c8d:a291:167:99e1:b956:56b8',
+  		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'TempSensor', 'devrole': 'child',
+		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_cmd': 0, 'led_state': 0},
+	{'id':3, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc	',
+  		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'EmergBtn', 'devrole': 'child',
+		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_cmd': 0, 'led_state': 0},
+	{'id':4, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc	',
+  		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'EmergBtn', 'devrole': 'child',
+		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_cmd': 0, 'led_state': 0},
+	{'id':5, 'serial': '4268614446', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc	',
+  		'rloc16': 'f803', 'lastreport': '2024-02-23 10:10:15', 'swver': 'v0.0.3', 'devtype': 'Clock', 'devrole': 'router',
+		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_cmd': 0, 'led_state': 0},
 ]
 
 for item in device:
-	SQL = 'INSERT INTO DEVICE (id, name, serial, ipv6, rloc16, lastreport, swver, devtype, devrole) VALUES({0}, "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'\
-		.format(item['id'], item['name'], item['serial'], item['ipv6'], item['rloc16'], item['lastreport'], item['swver'], item['devtype'], item['devrole'])
+	SQL = 'INSERT INTO DEVICE (id, name, serial, ipv6, rloc16, lastreport, swver, devtype, devrole, val_c, val_f, btn, led_cmd, led_state)' \
+		'VALUES({0}, "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}")' \
+		.format(item['id'], item['name'], item['serial'], item['ipv6'],
+		  item['rloc16'], item['lastreport'], item['swver'], item['devtype'], item['devrole'],
+		  item['val_c'], item['val_f'], item['btn'], item['led_cmd'], item['led_state'])
 	cur.execute(SQL)
 
 print ("Table 'DEVICE' is done")
