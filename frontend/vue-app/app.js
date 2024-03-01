@@ -135,6 +135,9 @@ const appDataset = {
       ],
       'form': [
         {name:'serial', 'title': 'Serial', type:'string'}
+      ],
+      'led_cmd_form': [
+        {name:'led_cmd', 'title': 'LED Command', type:'string'}
       ]
     }
   },
@@ -150,6 +153,9 @@ const appDataset = {
       ],
       'form': [
         {name:'serial', 'title': 'Serial', type:'string'}
+      ],
+      'led_cmd_form': [
+        {name:'led_cmd', 'title': 'LED Command', type:'string'}
       ]
     }
   },
@@ -170,6 +176,9 @@ const appDataset = {
       ],
       'form': [
         {name:'name', 'title': 'Name', type:'string'}
+      ],
+      'led_cmd_form': [
+        {name:'led_cmd', 'title': 'LED Command', type:'string'}
       ]
     }
   },
