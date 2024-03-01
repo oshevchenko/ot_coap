@@ -169,6 +169,7 @@ Vue.component('standard-page', {
     return {
         current_row: this.current_row,
         form_data: this.form_data,
+        led_data: this.led_data,
         timer: ''
     }
   },
@@ -198,8 +199,8 @@ Vue.component('standard-page', {
       @edit="editRow($event)"
       @delete="delete_front($event); form_data = null"
       @led_on="ledOn($event)"
+      @led_off="ledOff($event)"
     />
-
     <div v-if="form_data">
       <md-dialog :md-active.sync="form_data" class="p-2 md-dialog">
         <h2>{{title}}</h2>
@@ -214,13 +215,12 @@ Vue.component('standard-page', {
         />
       </md-dialog>
     </div>
-
     <div v-if="led_data">
       <md-dialog :md-active.sync="led_data" class="p-2 md-dialog">
         <h2>{{title}}</h2>
         <standard-form
             :data="led_data"
-            :fields="{name:'led_cmd', 'title': 'LED Command', type:'string'}"
+            :fields="appDataset[this.instance]['fields']['led_cmd_form']"
             :actions="[
                 {name:'submit', title: 'Submit', action: 'Save', class: '', dafault: true},
                 {name:'cancel', title: 'Cancel', action: 'Cancel', class: ''}
@@ -229,7 +229,6 @@ Vue.component('standard-page', {
         />
       </md-dialog>
     </div>
-
   </div>
   <div v-else>
     No data...
@@ -257,12 +256,35 @@ Vue.component('standard-page', {
     ledOn: function (row) {
       this.current_row = row
       this.read_back(row, (one_row) => {
+        console.log(one_row);
+        one_row['led_cmd'] = one_row['led_cmd'].replace(/_bon_|_boff_|boff/g, 'bon')
+        one_row['led_cmd'] = one_row['led_cmd'].replace(/_on_|_off_|off/g, 'on')
+        // console.log(s_led_cmd);
+        // one_row['led_cmd'] = s_led_cmd
+        console.log(one_row['led_cmd']);
+        console.log(one_row);
+
+        this.led_data = one_row
+      })
+    },
+    ledOff: function (row) {
+      this.current_row = row
+      this.read_back(row, (one_row) => {
+        console.log(one_row);
+        one_row['led_cmd'] = one_row['led_cmd'].replace(/_bon_|_boff_|bon/g, 'boff')
+        one_row['led_cmd'] = one_row['led_cmd'].replace(/_on_|_off_|on/g, 'off')
+        // console.log(s_led_cmd);
+        // one_row['led_cmd'] = s_led_cmd
+        console.log(one_row['led_cmd']);
+        console.log(one_row);
+
         this.led_data = one_row
       })
     },
     doAction: function($event) {
         if ($event.action.name == 'cancel') {
             this.form_data = null
+            this.led_data = null
         }
         if ($event.action.name == 'submit') {
             if ($event.valid == true) {
@@ -274,10 +296,12 @@ Vue.component('standard-page', {
                   }
                   this.update_front(this.current_row)
                   this.form_data = null
+                  this.led_data = null
               }
               else {
                   this.create_front($event.row)
                   this.form_data = null
+                  this.led_data = null
               }
             }
             else {
