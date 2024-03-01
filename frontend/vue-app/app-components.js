@@ -197,6 +197,7 @@ Vue.component('standard-page', {
       @select="selectRow($event)"
       @edit="editRow($event)"
       @delete="delete_front($event); form_data = null"
+      @led_on="ledOn($event)"
     />
 
     <div v-if="form_data">
@@ -213,6 +214,22 @@ Vue.component('standard-page', {
         />
       </md-dialog>
     </div>
+
+    <div v-if="led_data">
+      <md-dialog :md-active.sync="led_data" class="p-2 md-dialog">
+        <h2>{{title}}</h2>
+        <standard-form
+            :data="led_data"
+            :fields="{name:'led_cmd', 'title': 'LED Command', type:'string'}"
+            :actions="[
+                {name:'submit', title: 'Submit', action: 'Save', class: '', dafault: true},
+                {name:'cancel', title: 'Cancel', action: 'Cancel', class: ''}
+            ]"
+            @action="doAction($event)"
+        />
+      </md-dialog>
+    </div>
+
   </div>
   <div v-else>
     No data...
@@ -235,6 +252,12 @@ Vue.component('standard-page', {
       this.current_row = row
       this.read_back(row, (one_row) => {
         this.form_data = one_row
+      })
+    },
+    ledOn: function (row) {
+      this.current_row = row
+      this.read_back(row, (one_row) => {
+        this.led_data = one_row
       })
     },
     doAction: function($event) {

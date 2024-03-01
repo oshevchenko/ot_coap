@@ -1,5 +1,34 @@
+import asyncio
+
+from aiocoap import *
+from aiocoap import PUT
+from aiocoap.message import Message
+
 from model import default
 
+def led_on(led_number):
+	print('led_on {}'.format(led_number))
+def led_off(led_number):
+	print('led_off {}'.format(led_number))
+async def led_blink(led_number):
+	"""Perform a single PUT request to localhost on the default port, URI
+	"/other/block". The request is sent 2 seconds after initialization.
+
+    The payload is bigger than 1kB, and thus sent as several blocks."""
+
+	print('led_blink {}'.format(led_number))
+	context = await Context.create_client_context()
+
+	await asyncio.sleep(2)
+    # payload = b'{"id":4, "serial": "4444444444", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
+    #     "lastreport": "2024-02-23 11:10:15", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
+	payload = b'{"ctrltype": "led", "id": 2, "value": 2}'
+	request = Message(code=PUT, payload=payload, uri="coap://[fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc]/controldata")
+
+	response = await context.request(request).response
+
+	print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
+	
 class model(default.model):
 	def __init__(self, connection):
 		self.connection = connection
@@ -8,6 +37,25 @@ class model(default.model):
 	def update(self, id, data):
 		result = {'result':'ERROR', 'errors':['Failed to update']}
 		if id != 0:
+			led_cmd = data.get('led_cmd', None)
+			if led_cmd != None:
+				led_cmd_list_new = []
+				led_cmd_list = led_cmd.split(',')
+				led_number = 0
+				for cmd in led_cmd_list:
+					if cmd == 'on':
+						led_on(led_number)
+						led_cmd_list_new.append("on+")
+					elif cmd == 'off':
+						led_off(led_number)
+						led_cmd_list_new.append("off+")
+					elif cmd == 'blink':
+						asyncio.run(led_blink(led_number))
+						led_cmd_list_new.append("blink+")
+					else:
+						led_cmd_list_new.append(cmd)
+					led_number += 1
+				data['led_cmd'] = ','.join(led_cmd_list_new)
 			result = super().update(id, data)
 		else:
 			with self.connection:
