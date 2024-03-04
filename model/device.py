@@ -85,41 +85,40 @@ class model(default.model):
 	def update(self, id, data):
 		result = {'result':'ERROR', 'errors':['Failed to update']}
 		if id != 0:
-			do_coap_send = False
-			led_cmd = data.get('led_cmd', None)
-			ipv6_addr = data.get('ipv6', None)
-			if led_cmd != None and ipv6_addr != None:
+			do_coap_send_led = False
+			coap_action = data.get('coap_action', None)
+			if coap_action == 'led_on':
+				data['coap_action'] = 'done'
+				led_cmd = data.get('led_on_cmd', None)
 				led_cmd_list_send = []
-				led_cmd_list_processed = []
+				led_cmd = led_cmd.replace(" ", "")
 				led_cmd_list = led_cmd.split(',')
 				for cmd in led_cmd_list:
-					if cmd == 'on':
-						led_cmd_list_send.append('on')
-						led_cmd_list_processed.append("_on_")
-						do_coap_send = True
-					elif cmd == 'off':
-						led_cmd_list_send.append('off')
-						led_cmd_list_processed.append("_off_")
-						do_coap_send = True
-					elif cmd == 'bon':
-						led_cmd_list_send.append('blink')
-						led_cmd_list_processed.append("_bon_")
-						do_coap_send = True
-					elif cmd == 'boff':
-						led_cmd_list_send.append('off')
-						led_cmd_list_processed.append("_boff_")
-						do_coap_send = True
-					elif cmd in [ '_on_', '_off_', '_bon_', '_boff_']:
-						led_cmd_list_send.append("x")
-						led_cmd_list_processed.append(cmd)
+					if cmd in ['on', 'blink']:
+						led_cmd_list_send.append(cmd)
+						do_coap_send_led = True
 					else:
 						led_cmd_list_send.append("x")
-						led_cmd_list_processed.append("x")
-				data['led_cmd'] = ','.join(led_cmd_list_processed)
-				print("data['led_cmd'] {}".format(data['led_cmd']))
+				data['led_on_cmd'] = ','.join(led_cmd_list_send)
+			elif coap_action == 'led_off':
+				data['coap_action'] = 'done'
+				led_cmd = data.get('led_off_cmd', None)
+				led_cmd_list_send = []
+				led_cmd = led_cmd.replace(" ", "")
+				led_cmd_list = led_cmd.split(',')
+				for cmd in led_cmd_list:
+					if cmd == 'off':
+						led_cmd_list_send.append(cmd)
+						do_coap_send_led = True
+					else:
+						led_cmd_list_send.append("x")
+				data['led_off_cmd'] = ','.join(led_cmd_list_send)
+			else:
+				led_cmd = None
 			result = super().update(id, data)
-			if do_coap_send:
+			if do_coap_send_led:
 				try:
+					ipv6_addr = data.get('ipv6', None)
 					asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
 				except Exception as e:
 					print('Error: {}'.format(e))
@@ -142,6 +141,7 @@ class model(default.model):
 							record[field] = row[field_i]
 							field_i += 1
 					result = super().update(record['id'], data)
+		print('result {}'.format(result))
 		return result
 
 	def read(self, id = None ):

@@ -71,15 +71,17 @@ const routes = [
 
 const router = new VueRouter({routes})
 const urlHash = '#'
+const API_URL = 'http://localhost:5000/';
+// import { API_URL } from './constants.js';
 
 const appDataset = {
   'menu':{
     'instance': 'menu',
-    'url': 'http://192.168.2.9:8080/menu/',
+    'url': `${API_URL}menu/`,
   },
   'client': {
     'instance': 'client',
-    'url': 'http://192.168.2.9:8080/client/',
+    'url': `${API_URL}client/`,
     'fields': {
       'table': [
         {name:'name', 'title': 'Name', type:'string', sort: true},
@@ -108,7 +110,7 @@ const appDataset = {
 
   'seller': {
     'instance': 'seller',
-    'url': 'http://192.168.2.9:8080/seller/',
+    'url': `${API_URL}seller/`,
     'fields': {
       'table': [
         {name:'name', 'title': 'Name', type:'string', sort: true},
@@ -122,10 +124,10 @@ const appDataset = {
       ]
     }
   },
-
+  
   'device_temperature': {
     'instance': 'device_temperature',
-    'url': 'http://192.168.2.9:8080/device_temperature/',
+    'url': `${API_URL}device_temperature/`,
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -136,15 +138,18 @@ const appDataset = {
       'form': [
         {name:'serial', 'title': 'Serial', type:'string'}
       ],
-      'led_cmd_form': [
-        {name:'led_cmd', 'title': 'LED Command', type:'string'}
+      'led_cmd_on_form': [
+        {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'}
+      ],
+      'led_cmd_off_form': [
+        {name:'led_off_cmd', 'title': 'LED OFF: [x|off],...', type:'string'}
       ]
     }
   },
 
   'device_emergency': {
     'instance': 'device_emergency',
-    'url': 'http://192.168.2.9:8080/device_emergency/',
+    'url': `${API_URL}device_emergency/`,
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -154,15 +159,18 @@ const appDataset = {
       'form': [
         {name:'serial', 'title': 'Serial', type:'string'}
       ],
-      'led_cmd_form': [
-        {name:'led_cmd', 'title': 'LED Command', type:'string'}
+      'led_cmd_on_form': [
+        {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'}
+      ],
+      'led_cmd_off_form': [
+        {name:'led_off_cmd', 'title': 'LED OFF: [x|off],...', type:'string'}
       ]
     }
   },
 
   'device': {
     'instance': 'device',
-    'url': 'http://192.168.2.9:8080/device/',
+    'url': `${API_URL}device/`,
     'fields': {
       'table': [
         {name:'serial', 'title': 'Serial', type:'string', sort: true},
@@ -177,15 +185,18 @@ const appDataset = {
       'form': [
         {name:'name', 'title': 'Name', type:'string'}
       ],
-      'led_cmd_form': [
-        {name:'led_cmd', 'title': 'LED Command', type:'string'}
+      'led_cmd_on_form': [
+        {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'}
+      ],
+      'led_cmd_off_form': [
+        {name:'led_off_cmd', 'title': 'LED OFF: [x|off],...', type:'string'}
       ]
     }
   },
 
   'product': {
     'instance': 'product',
-    'url': 'http://192.168.2.9:8080/product/',
+    'url': `${API_URL}product/`,
     'fields': {
       'table': [
         {name:'code', 'title': 'Code', type:'string', sort: true},
