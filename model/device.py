@@ -1,6 +1,7 @@
 import functools  # at the top with the other imports
 import logging
 import asyncio
+import threading
 
 from aiocoap import *
 from aiocoap import PUT
@@ -57,7 +58,8 @@ async def led_blink(ipv6_addr, led_number):
 
 	response = await context.request(request).response
 
-	print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
+	# print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
+	logging.info('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
 
 async def coap_send_led(ipv6_addr, led_list):
 	"""Perform a single PUT request to localhost on the default port, URI
@@ -68,7 +70,7 @@ async def coap_send_led(ipv6_addr, led_list):
 	logging.info('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
 	context = await Context.create_client_context()
 
-	await asyncio.sleep(2)
+	# await asyncio.sleep(2)
 	payload_dict = {}
 	payload_dict['ctrltype'] = 'led'
 	payload_dict['value'] = led_list
@@ -89,6 +91,7 @@ class model(default.model):
 		self.devType = None
 	def update(self, id, data):
 		result = {'result':'ERROR', 'errors':['Failed to update']}
+		logging.info('update id {} data {}'.format(id, data))
 		if id != 0:
 			do_coap_send_led = False
 			coap_action = data.get('coap_action', None)
@@ -125,14 +128,17 @@ class model(default.model):
 				try:
 					ipv6_addr = data.get('ipv6', None)
 					logging.info("ipv6_addr: {}.".format(ipv6_addr))
-					loop = asyncio.get_event_loop()
-					logging.info("loop {} ipv6_addr: {}.".format(loop, ipv6_addr))
+					# loop = asyncio.get_event_loop()
+					# logging.info("loop {} ipv6_addr: {}.".format(loop, ipv6_addr))
 
 					# loop.run_in_executor(None, coap_send_led, p)
-					loop.run_in_executor(None, functools.partial(coap_send_led, data={
-						'ipv6_addr': ipv6_addr,
-						'led_list': led_cmd_list_send
-					}))
+					_thread = threading.Thread(target=asyncio.run, args=(coap_send_led(ipv6_addr, led_cmd_list_send),))
+					_thread.start()
+
+					# loop.run_in_executor(None, functools.partial(coap_send_led, data={
+					# 	'ipv6_addr': ipv6_addr,
+					# 	'led_list': led_cmd_list_send
+					# }))
 					# asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
 				except Exception as e:
 					logging.error('Error: {}'.format(e))

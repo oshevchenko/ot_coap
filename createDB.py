@@ -143,19 +143,19 @@ for item in product:
 print ("Table 'PRODUCT' is done")
 
 device = [
-	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc',
+	{'id':1, 'serial': '1345234234', 'name': 'Room 10 t. sensor', 'ipv6': 'fd22:11f9:7dd5:1:5f41:18e6:15eb:d927',
   		'rloc16': 'f801', 'lastreport': '2024-02-23 10:14:06', 'swver': 'v0.0.1', 'devtype': 'TempSensor', 'devrole': 'child',
 		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_on_cmd': 'x,blink', 'led_off_cmd': 'off,off', 'coap_action': 'undef'},
-	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc',
+	{'id':2, 'serial': '0345289093', 'name': 'Room 11 t. sensor', 'ipv6': 'fd22:11f9:7dd5:1:5f41:18e6:15eb:d927',
   		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'TempSensor', 'devrole': 'child',
 		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_on_cmd': 'x,blink', 'led_off_cmd': 'off,off', 'coap_action': 'undef'},
-	{'id':3, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc',
+	{'id':3, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5f41:18e6:15eb:d927',
   		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'EmergBtn', 'devrole': 'child',
 		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_on_cmd': 'x,blink', 'led_off_cmd': 'off,off', 'coap_action': 'undef'},
-	{'id':4, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc',
+	{'id':4, 'serial': '4268609461', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5f41:18e6:15eb:d927',
   		'rloc16': 'f802', 'lastreport': '2024-02-23 10:14:26', 'swver': 'v0.0.1', 'devtype': 'EmergBtn', 'devrole': 'child',
 		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_on_cmd': 'x,blink', 'led_off_cmd': 'off,off', 'coap_action': 'undef'},
-	{'id':5, 'serial': '4268614446', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc',
+	{'id':5, 'serial': '4268614446', 'name': 'Device 34', 'ipv6': 'fd22:11f9:7dd5:1:5f41:18e6:15eb:d927',
   		'rloc16': 'f803', 'lastreport': '2024-02-23 10:10:15', 'swver': 'v0.0.3', 'devtype': 'Clock', 'devrole': 'router',
 		'val_c': '24.3', 'val_f': '75.7', 'btn': '0', 'led_on_cmd': 'x,blink', 'led_off_cmd': 'off,off', 'coap_action': 'undef'},
 ]

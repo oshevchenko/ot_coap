@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import sys
 from flask import Flask, flash, session, request, Response, send_from_directory, render_template, jsonify
 from flask_cors import cross_origin
 
@@ -79,12 +80,29 @@ def err_500(error):
 if not app.debug:
 	import logging
 	from logging.handlers import RotatingFileHandler
-	file_handler = RotatingFileHandler('log/my_app.log', 'a', 1 * 1024 * 1024, 10)
-	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-	app.logger.setLevel(logging.INFO)
-	file_handler.setLevel(logging.INFO)
-	app.logger.addHandler(file_handler)
-	app.logger.info('startup')
+	# file_handler = RotatingFileHandler('log/my_app.log', 'a', 1 * 1024 * 1024, 10)
+	# file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+	# app.logger.setLevel(logging.ERROR)
+	# file_handler.setLevel(logging.ERROR)
+	# app.logger.addHandler(file_handler)
+	# app.logger.info('startup')
+
+	log_name="coap.log"
+	log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
+
+	handler = RotatingFileHandler(log_name, mode='a', maxBytes=5*1024*1024, 
+									backupCount=2, encoding=None, delay=0)
+	handler.setFormatter(log_formatter)
+	handler.setLevel(logging.INFO)
+	log = logging.getLogger()
+	log.addHandler(handler)
+
+	handler = logging.StreamHandler(sys.stdout)
+	handler.setFormatter(log_formatter)
+	handler.setLevel(logging.INFO)
+	log.addHandler(handler)
+
+	log.setLevel(logging.INFO)
 
 ##############################
 # Run app

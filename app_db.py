@@ -1,5 +1,7 @@
 import sqlite3
 import logging
+from logging.handlers import RotatingFileHandler
+import sys
 from model import empty, menu, client, seller, device, product, device_temperature, device_emergency
 
 class app_db:
@@ -18,13 +20,22 @@ class app_db:
 		self.model['product'] = product.model(self.connection)
 		self.model['device_temperature'] = device_temperature.model(self.connection)
 		self.model['device_emergency'] = device_emergency.model(self.connection)
-		logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w",
-							format="%(asctime)s %(levelname)s %(message)s")
-		logging.debug("A DEBUG Message")
-		logging.info("An INFO")
-		logging.warning("A WARNING")
-		logging.error("An ERROR")
-		logging.critical("A message of CRITICAL severity")
+		# log_name="coap.log"
+		# log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
+
+		# handler = RotatingFileHandler(log_name, mode='a', maxBytes=5*1024*1024, 
+		# 								backupCount=2, encoding=None, delay=0)
+		# handler.setFormatter(log_formatter)
+		# handler.setLevel(logging.INFO)
+		# log = logging.getLogger()
+		# log.addHandler(handler)
+
+		# handler = logging.StreamHandler(sys.stdout)
+		# handler.setFormatter(log_formatter)
+		# handler.setLevel(logging.INFO)
+		# log.addHandler(handler)
+
+		# log.setLevel(logging.INFO)
 
 	def __del__(self):
 		self.connection.close()
