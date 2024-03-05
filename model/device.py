@@ -1,4 +1,5 @@
 import functools  # at the top with the other imports
+import logging
 import asyncio
 
 from aiocoap import *
@@ -63,7 +64,8 @@ async def coap_send_led(ipv6_addr, led_list):
 	"/other/block". The request is sent 2 seconds after initialization.
 	The payload is bigger than 1kB, and thus sent as several blocks."""
 
-	print('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
+	# print('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
+	logging.info('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
 	context = await Context.create_client_context()
 
 	await asyncio.sleep(2)
@@ -71,11 +73,13 @@ async def coap_send_led(ipv6_addr, led_list):
 	payload_dict['ctrltype'] = 'led'
 	payload_dict['value'] = led_list
 	payload = json.dumps(payload_dict).encode('utf-8')
-	print('payload {} type {}'.format(payload, type(payload)))
+	# print('payload {} type {}'.format(payload, type(payload)))
+	logging.info('payload {} type {}'.format(payload, type(payload))
 	coap_uri = "coap://[{0}]/controldata".format(ipv6_addr)
 	request = Message(code=PUT, payload=payload, uri=coap_uri)
 	response = await context.request(request).response
-	print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
+	# print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
+	logging.info('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
 
 
 class model(default.model):
@@ -121,6 +125,8 @@ class model(default.model):
 				try:
 					ipv6_addr = data.get('ipv6', None)
 					loop = asyncio.get_event_loop()
+					logging.info("loop {} ipv6_addr: {}.".format(loop, ipv6_addr))
+
 					# loop.run_in_executor(None, coap_send_led, p)
 					loop.run_in_executor(None, functools.partial(coap_send_led, data={
 						'ipv6_addr': ipv6_addr,
