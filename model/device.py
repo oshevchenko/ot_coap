@@ -124,6 +124,7 @@ class model(default.model):
 			if do_coap_send_led:
 				try:
 					ipv6_addr = data.get('ipv6', None)
+					logging.info("ipv6_addr: {}.".format(ipv6_addr))
 					loop = asyncio.get_event_loop()
 					logging.info("loop {} ipv6_addr: {}.".format(loop, ipv6_addr))
 
@@ -134,7 +135,7 @@ class model(default.model):
 					}))
 					# asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
 				except Exception as e:
-					print('Error: {}'.format(e))
+					logging.error('Error: {}'.format(e))
 		else:
 			with self.connection:
 				cursor = self.connection.cursor()
