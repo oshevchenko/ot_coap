@@ -74,7 +74,7 @@ async def coap_send_led(ipv6_addr, led_list):
 	payload_dict['value'] = led_list
 	payload = json.dumps(payload_dict).encode('utf-8')
 	# print('payload {} type {}'.format(payload, type(payload)))
-	logging.info('payload {} type {}'.format(payload, type(payload))
+	logging.info('payload {} type {}'.format(payload, type(payload)))
 	coap_uri = "coap://[{0}]/controldata".format(ipv6_addr)
 	request = Message(code=PUT, payload=payload, uri=coap_uri)
 	response = await context.request(request).response
