@@ -1,3 +1,4 @@
+import functools  # at the top with the other imports
 import asyncio
 
 from aiocoap import *
@@ -119,7 +120,13 @@ class model(default.model):
 			if do_coap_send_led:
 				try:
 					ipv6_addr = data.get('ipv6', None)
-					asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
+					loop = asyncio.get_event_loop()
+					# loop.run_in_executor(None, coap_send_led, p)
+					loop.run_in_executor(None, functools.partial(coap_send_led, data={
+						'ipv6_addr': ipv6_addr,
+						'led_list': led_cmd_list_send
+					}))
+					# asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
 				except Exception as e:
 					print('Error: {}'.format(e))
 		else:
