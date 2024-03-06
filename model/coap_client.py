@@ -37,6 +37,7 @@ class coap_client:
     @classmethod
     async def entrypoint(cls, *args, **kwargs):
         # Wait for at most 1 second
+        cls.result = {'result':'ERROR', 'errors':['Coap TimeoutError']}
         try:
             await asyncio.wait_for(cls.coap_send(*args, **kwargs), timeout=1.0)
         except asyncio.exceptions.TimeoutError:
@@ -44,6 +45,7 @@ class coap_client:
             cls.result = {'result':'ERROR', 'errors':['Coap TimeoutError']}
         except:
             logging.error('COAP Exception')
+            cls.result = {'result':'ERROR', 'errors':['Coap Exception']}
 
 
     @classmethod
