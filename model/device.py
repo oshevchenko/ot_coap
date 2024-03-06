@@ -6,83 +6,10 @@ import threading
 from aiocoap import *
 from aiocoap import PUT
 from aiocoap.message import Message
+from model.coap_client import coap_client
 
 from model import default
 import json
-
-async def led_on(ipv6_addr, led_number):
-	print('led_on {}'.format(led_number))
-	context = await Context.create_client_context()
-
-	await asyncio.sleep(2)
-	# payload = b'{"id":4, "serial": "4444444444", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
-	#     "lastreport": "2024-02-23 11:10:15", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
-
-	payload = b'{"ctrltype": "led", "id": 2, "value": 1}'
-	request = Message(code=PUT, payload=payload, uri="coap://[fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc]/controldata")
-
-	response = await context.request(request).response
-
-	print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-
-async def led_off(ipv6_addr, led_number):
-	print('led_off {}'.format(led_number))
-	context = await Context.create_client_context()
-
-	await asyncio.sleep(2)
-	# payload = b'{"id":4, "serial": "4444444444", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
-	#     "lastreport": "2024-02-23 11:10:15", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
-
-	payload = b'{"ctrltype": "led", "id": 2, "value": 0}'
-	request = Message(code=PUT, payload=payload, uri="coap://[fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc]/controldata")
-
-	response = await context.request(request).response
-
-	print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-
-async def led_blink(ipv6_addr, led_number):
-	"""Perform a single PUT request to localhost on the default port, URI
-	"/other/block". The request is sent 2 seconds after initialization.
-
-	The payload is bigger than 1kB, and thus sent as several blocks."""
-
-	print('led_blink {}'.format(led_number))
-	context = await Context.create_client_context()
-
-	await asyncio.sleep(2)
-	# payload = b'{"id":4, "serial": "4444444444", "name": "Director clock", "ipv6": "fda1:98ec:3c8d:a291:167:99e1:b956:56ba",\
-	#     "lastreport": "2024-02-23 11:10:15", "swver": "v0.0.3", "devtype": "dig. clock", "devrole": "router"}'
-
-	payload = b'{"ctrltype": "led", "id": 2, "value": 2}'
-	request = Message(code=PUT, payload=payload, uri="coap://[fd22:11f9:7dd5:1:5d30:ca15:60b0:21bc]/controldata")
-
-	response = await context.request(request).response
-
-	# print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-	logging.info('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-
-async def coap_send_led(ipv6_addr, led_list):
-	"""Perform a single PUT request to localhost on the default port, URI
-	"/other/block". The request is sent 2 seconds after initialization.
-	The payload is bigger than 1kB, and thus sent as several blocks."""
-
-	# print('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
-	logging.info('ipv6_addr {} led_list {}'.format(ipv6_addr, led_list))
-	context = await Context.create_client_context()
-
-	# await asyncio.sleep(2)
-	payload_dict = {}
-	payload_dict['ctrltype'] = 'led'
-	payload_dict['value'] = led_list
-	payload = json.dumps(payload_dict).encode('utf-8')
-	# print('payload {} type {}'.format(payload, type(payload)))
-	logging.info('payload {} type {}'.format(payload, type(payload)))
-	coap_uri = "coap://[{0}]/controldata".format(ipv6_addr)
-	request = Message(code=PUT, payload=payload, uri=coap_uri)
-	response = await context.request(request).response
-	# print('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-	logging.info('Result: %s\n%s'%(response.code, response.payload.decode('utf-8')))
-
 
 class model(default.model):
 	def __init__(self, connection):
@@ -96,7 +23,7 @@ class model(default.model):
 			do_coap_send_led = False
 			coap_action = data.get('coap_action', None)
 			if coap_action == 'led_on':
-				data['coap_action'] = 'done'
+				# data['coap_action'] = 'done'
 				led_cmd = data.get('led_on_cmd', None)
 				led_cmd_list_send = []
 				led_cmd = led_cmd.replace(" ", "")
@@ -109,7 +36,7 @@ class model(default.model):
 						led_cmd_list_send.append("x")
 				data['led_on_cmd'] = ','.join(led_cmd_list_send)
 			elif coap_action == 'led_off':
-				data['coap_action'] = 'done'
+				# data['coap_action'] = 'done'
 				led_cmd = data.get('led_off_cmd', None)
 				led_cmd_list_send = []
 				led_cmd = led_cmd.replace(" ", "")
@@ -122,26 +49,30 @@ class model(default.model):
 						led_cmd_list_send.append("x")
 				data['led_off_cmd'] = ','.join(led_cmd_list_send)
 			else:
-				led_cmd = None
-			result = super().update(id, data)
+				pass
+			coap_result = {}
 			if do_coap_send_led:
 				try:
 					ipv6_addr = data.get('ipv6', None)
-					logging.info("ipv6_addr: {}.".format(ipv6_addr))
-					# loop = asyncio.get_event_loop()
-					# logging.info("loop {} ipv6_addr: {}.".format(loop, ipv6_addr))
-
-					# loop.run_in_executor(None, coap_send_led, p)
-					_thread = threading.Thread(target=asyncio.run, args=(coap_send_led(ipv6_addr, led_cmd_list_send),))
-					_thread.start()
-
-					# loop.run_in_executor(None, functools.partial(coap_send_led, data={
-					# 	'ipv6_addr': ipv6_addr,
-					# 	'led_list': led_cmd_list_send
-					# }))
-					# asyncio.run(coap_send_led(ipv6_addr, led_cmd_list_send))
+					coap_result = coap_client.send_led(ipv6_addr, led_cmd_list_send)
+					logging.info("coap_result: {}.".format(coap_result))
+					if coap_result['result'] == 'OK':
+						data['coap_action'] = '{}_done'.format(coap_action)
+					else:
+						data['coap_action'] = 'error'
 				except Exception as e:
+					data['coap_action'] = 'error'
+					coap_result = {'result':'ERROR', 'errors':['Exception: {}'.format(e)]}
 					logging.error('Error: {}'.format(e))
+			update_result = super().update(id, data)
+			errors = []
+			errors.extend(update_result.get('errors', []))
+			errors.extend(coap_result.get('errors', []))
+			logging.info('errors: {} {}.'.format(errors, type(errors)))
+			if len(errors) != 0:
+				result = {'result':'ERROR', 'errors':errors}
+			else:
+				result = {'result':'OK'}
 		else:
 			with self.connection:
 				cursor = self.connection.cursor()
@@ -161,7 +92,8 @@ class model(default.model):
 							record[field] = row[field_i]
 							field_i += 1
 					result = super().update(record['id'], data)
-		print('result {}'.format(result))
+		# print('result {}'.format(result))
+		logging.info('result {}'.format(result))
 		return result
 
 	def read(self, id = None ):
