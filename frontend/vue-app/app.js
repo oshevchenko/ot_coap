@@ -71,7 +71,7 @@ const routes = [
 
 const router = new VueRouter({routes})
 const urlHash = '#'
-const API_URL = 'http://localhost:5000/';
+const API_URL = 'http://192.168.2.9:8080/';
 // import { API_URL } from './constants.js';
 
 const appDataset = {
