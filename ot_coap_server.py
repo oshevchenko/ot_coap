@@ -105,10 +105,19 @@ class Neighbors(resource.Resource):
 
         payload_dict_coap = json.loads(payload)
         print('PUT payload type: %s' % type(payload_dict_coap))
-        data_list = payload_dict_coap.get('children', None)
-        if data_list:
+        data_list = payload_dict_coap.get('neighbors', [])
+        router_rloc16 = payload_dict_coap.get('rloc16', 'dummy')
+        router_payload_dict = {'rloc16': router_rloc16, 'rssi':''}
+        if len(data_list) > 0:
+            router_rssi_list = []
             for payload_dict in data_list:
+                if payload_dict['rloc16'].endswith('00'):
+                    router_rssi_list.append(payload_dict['rssi'])
+                    continue
                 db.getModel('device').update(0, payload_dict)
+            if len(router_rssi_list) > 0:
+                router_payload_dict['rssi'] = ','.join(router_rssi_list)
+                db.getModel('device').update(0, router_payload_dict)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
 
 class SensorData(resource.Resource):
