@@ -112,7 +112,7 @@ class Neighbors(resource.Resource):
             router_rssi_list = []
             for payload_dict in data_list:
                 if payload_dict['rloc16'].endswith('00'):
-                    router_rssi_list.append(payload_dict['rssi'])
+                    router_rssi_list.append('{}:{}'.format(payload_dict['rloc16'],payload_dict['rssi']))
                     continue
                 db.getModel('device').update(0, payload_dict)
             if len(router_rssi_list) > 0:
