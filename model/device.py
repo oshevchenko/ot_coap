@@ -17,51 +17,47 @@ class model(default.model):
 		self.objName = 'DEVICE'
 		self.devType = None
 	def update(self, id, data):
+		def fill_led_cmd_send_list(led_cmd, valid_cmd_list):
+			led_cmd_send_list = []
+			do_coap_send_led = False
+			led_cmd = led_cmd.replace(" ", "")
+			led_cmd_list = led_cmd.split(',')
+			for cmd in led_cmd_list:
+				if cmd in valid_cmd_list:
+					led_cmd_send_list.append(cmd)
+					do_coap_send_led = True
+				else:
+					led_cmd_send_list.append("x")
+			return led_cmd_send_list, do_coap_send_led
+
 		result = {'result':'ERROR', 'errors':['Failed to update']}
+		led_cmd_send_list = []
+		do_coap_send_led = False
 		logging.info('update id {} data {}'.format(id, data))
 		if id != 0:
-			do_coap_send_led = False
 			coap_action = data.get('coap_action', None)
 			if coap_action == 'led_on':
-				# data['coap_action'] = 'done'
-				led_cmd = data.get('led_on_cmd', None)
-				led_cmd_list_send = []
-				led_cmd = led_cmd.replace(" ", "")
-				led_cmd_list = led_cmd.split(',')
-				for cmd in led_cmd_list:
-					if cmd in ['on', 'blink']:
-						led_cmd_list_send.append(cmd)
-						do_coap_send_led = True
-					else:
-						led_cmd_list_send.append("x")
-				data['led_on_cmd'] = ','.join(led_cmd_list_send)
+				led_cmd = data.get('led_on_cmd', 'x')
+				led_cmd_send_list, do_coap_send_led = fill_led_cmd_send_list(led_cmd, ['on', 'blink'])
+				data['led_on_cmd'] = ','.join(led_cmd_send_list)
 			elif coap_action == 'led_off':
-				# data['coap_action'] = 'done'
-				led_cmd = data.get('led_off_cmd', None)
-				led_cmd_list_send = []
-				led_cmd = led_cmd.replace(" ", "")
-				led_cmd_list = led_cmd.split(',')
-				for cmd in led_cmd_list:
-					if cmd == 'off':
-						led_cmd_list_send.append(cmd)
-						do_coap_send_led = True
-					else:
-						led_cmd_list_send.append("x")
-				data['led_off_cmd'] = ','.join(led_cmd_list_send)
+				led_cmd = data.get('led_off_cmd', 'x')
+				led_cmd_send_list, do_coap_send_led = fill_led_cmd_send_list(led_cmd, ['off'])
+				data['led_off_cmd'] = ','.join(led_cmd_send_list)
 			else:
 				pass
 			coap_result = {}
 			if do_coap_send_led:
 				try:
-					ipv6_addr = data.get('ipv6', None)
-					coap_result = coap_client.send_led(ipv6_addr, led_cmd_list_send)
+					ipv6_addr = data.get('ipv6', 'fec0::1')
+					coap_result = coap_client.send_led(ipv6_addr, led_cmd_send_list)
 					logging.info("coap_result: {}.".format(coap_result))
 					if coap_result['result'] == 'OK':
-						data['coap_action'] = '{}_done'.format(coap_action)
+						data['coap_action'] = '{}_ok'.format(coap_action)
 					else:
-						data['coap_action'] = 'error'
+						data['coap_action'] = '{}_err'.format(coap_action)
 				except Exception as e:
-					data['coap_action'] = 'error'
+					data['coap_action'] = '{}_err'.format(coap_action)
 					coap_result = {'result':'ERROR', 'errors':['Exception: {}'.format(e)]}
 					logging.error('Error: {}'.format(e))
 			update_result = super().update(id, data)
@@ -79,10 +75,11 @@ class model(default.model):
 				cursor.execute("SELECT * FROM {0} WHERE(serial='{1}');".format(self.objName, data["serial"]))
 				field_names = list(map(lambda x: x[0], cursor.description))
 				rows = cursor.fetchall()
-				print('rows {} self.objName {}'.format(rows, self.objName))
+				# print('rows {} self.objName {}'.format(rows, self.objName))
+				# logging.info('rows {} self.objName {}'.format(rows, self.objName))
 				if (len(rows) == 0):
 					# Create new record
-					print('create new record {} {}'.format(self.objName, data))
+					# print('create new record {} {}'.format(self.objName, data))
 					result = super().create(data)
 				else:
 					record = {}

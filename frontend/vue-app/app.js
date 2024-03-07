@@ -180,10 +180,12 @@ const appDataset = {
         {name:'lastreport', 'title': 'Last seen', type:'string', sort: true},
         {name:'swver', 'title': 'SW ver.', type:'string', sort: true},
         {name:'devtype', 'title': 'Type', type:'string', sort: true},
-        {name:'devrole', 'title': 'OT role', type:'string', sort: true}
+        {name:'devrole', 'title': 'OT role', type:'string', sort: true},
+        {name:'coap_action', 'title': 'COAP cmd', type:'string', sort: true}
       ],
       'form': [
-        {name:'name', 'title': 'Name', type:'string'}
+        {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'},
+        {name:'led_off_cmd', 'title': 'LED OFF: [x|off],...', type:'string'}
       ],
       'led_cmd_on_form': [
         {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'}
