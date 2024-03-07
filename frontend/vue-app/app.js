@@ -181,7 +181,8 @@ const appDataset = {
         {name:'swver', 'title': 'SW ver.', type:'string', sort: true},
         {name:'devtype', 'title': 'Type', type:'string', sort: true},
         {name:'devrole', 'title': 'OT role', type:'string', sort: true},
-        {name:'coap_action', 'title': 'COAP cmd', type:'string', sort: true}
+        {name:'coap_action', 'title': 'COAP cmd', type:'string', sort: true},
+        {name:'rssi', 'title': 'RSSI', type:'string', sort: true}
       ],
       'form': [
         {name:'led_on_cmd', 'title': 'LED ON: [x|on|blink],...', type:'string'},

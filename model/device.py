@@ -35,6 +35,7 @@ class model(default.model):
 		do_coap_send_led = False
 		logging.info('update id {} data {}'.format(id, data))
 		if id != 0:
+			# id != 0 - call from WebUI.
 			coap_action = data.get('coap_action', None)
 			if coap_action == 'led_on':
 				led_cmd = data.get('led_on_cmd', 'x')
@@ -70,9 +71,17 @@ class model(default.model):
 			else:
 				result = {'result':'OK'}
 		else:
+			# id == 0 - call from ot_coap_server.py KeepAlive, SensorData etc.
 			with self.connection:
 				cursor = self.connection.cursor()
-				cursor.execute("SELECT * FROM {0} WHERE(serial='{1}');".format(self.objName, data["serial"]))
+				serial = data.get('serial', None)
+				rloc16 = data.get('rloc16', None)
+				if serial != None:
+					cursor.execute("SELECT * FROM {0} WHERE(serial='{1}');".format(self.objName, serial))
+				elif rloc16 != None:
+					cursor.execute("SELECT * FROM {0} WHERE(rloc16='{1}');".format(self.objName, rloc16))
+				else:
+					pass
 				field_names = list(map(lambda x: x[0], cursor.description))
 				rows = cursor.fetchall()
 				# print('rows {} self.objName {}'.format(rows, self.objName))

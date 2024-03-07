@@ -85,15 +85,34 @@ class KeepAlive(resource.Resource):
         curr_time = datetime.datetime.now().\
                 strftime("%Y-%m-%d %H:%M:%S").encode('ascii')
         payload_dict['lastreport'] = curr_time.decode('utf-8')
-
+        print('Update device: %s' % payload_dict)
         db.getModel('device').update(0, payload_dict)
         self.content = request.payload
         # self.set_content(request.payload)
         return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
 
+class Neighbors(resource.Resource):
+    def __init__(self):
+        super().__init__()
+        self.content = b"xxx\n"
+
+    async def render_get(self, request):
+        return aiocoap.Message(payload=self.content)
+
+    async def render_put(self, request):
+        payload = request.payload.decode('utf-8')
+        print('PUT payload: {}'.format(payload))
+
+        payload_dict_coap = json.loads(payload)
+        print('PUT payload type: %s' % type(payload_dict_coap))
+        data_list = payload_dict_coap.get('children', None)
+        if data_list:
+            for payload_dict in data_list:
+                db.getModel('device').update(0, payload_dict)
+        return aiocoap.Message(code=aiocoap.CHANGED, payload=self.content)
+
 class SensorData(resource.Resource):
     """"""
-
     def __init__(self):
         super().__init__()
         self.set_content(b"xxx\n")
@@ -227,6 +246,7 @@ async def main():
     root.add_resource(['other', 'separate'], SeparateLargeResource())
     root.add_resource(['keepalive'], KeepAlive())
     root.add_resource(['sensordata'], SensorData())
+    root.add_resource(['neighbors'], Neighbors())
     root.add_resource(['whoami'], WhoAmI())
 
     await aiocoap.Context.create_server_context(root)
