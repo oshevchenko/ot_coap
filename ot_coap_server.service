@@ -1,0 +1,15 @@
+[Unit]
+Description=COAP server to save data to sqlite3 database.
+After=network.target
+
+[Service]
+User=debian
+
+WorkingDirectory=/home/debian/workspace/ot_coap
+Environment="PATH=/home/debian/workspace/ot_coap/ot_coap_env/bin"
+
+ExecStart=/home/debian/workspace/ot_coap/ot_coap_env/bin/python3 -m ot_coap_server
+
+[Install]
+WantedBy=multi-user.target
+
