@@ -25,7 +25,7 @@ Vue.component('client', {
 mounted: function() {
   store.commit('title', 'Client')
   this.instance = 'client'
-  this.instance_url = appDataset[this.instance]['url']
+  this.instance_url = location.origin.concat(appDataset[this.instance]['url'])
   this.read_front()
 },
 methods: {
@@ -65,7 +65,7 @@ Vue.component('client-edit', {
 mounted: function() {
   store.commit('title', 'Client Edit')
   this.instance = 'client'
-  this.instance_url = appDataset[this.instance]['url']
+  this.instance_url = location.origin.concat(appDataset[this.instance]['url'])
   this.init()
 },
 methods: {

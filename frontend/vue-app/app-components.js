@@ -251,7 +251,7 @@ Vue.component('standard-page', {
 </div>`,
   mounted: function() {
     store.commit('title', this.title)
-    this.instance_url = appDataset[this.instance]['url']
+    this.instance_url = location.origin.concat(appDataset[this.instance]['url'])
     this.read_front()
     this.timer = setInterval(this.read_front, 1000)
   },
@@ -635,7 +635,7 @@ Vue.component('app-menu', {
 `,
 mounted: function () {
   this.instance = 'menu'
-  this.instance_url = appDataset[this.instance]['url']
+  this.instance_url = location.origin.concat(appDataset[this.instance]['url'])
   this.read_front()
   /*
   this.sections = [

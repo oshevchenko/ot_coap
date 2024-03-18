@@ -36,7 +36,7 @@ Vue.component('product', {
   mounted: function() {
     store.commit('title', 'Product')
     this.instance = 'product'
-    this.instance_url = appDataset[this.instance]['url']
+    this.instance_url = location.origin.concat(appDataset[this.instance]['url'])
     this.read_front()
     this.perpageAray = [2, 3, 4, 6, 8, 12]
     this.perpage = app.getSettings('produсt.perpage', 4)
